@@ -88,7 +88,7 @@ void deleteChar(){
     else{
         temp->prev->next = temp->next;
         temp->next->prev = temp->prev;
-        cursor = temp->next;
+        cursor = temp->prev;
     }
     free(temp);
 }
