@@ -5,44 +5,42 @@ let current = input.shift().split("").map(e => +e);
 let end = input.shift().split("").map(e => +e);
 let d = [-1, 0, 1];
 
-function solution(){
+function solution(changeFirst, copyCurrent){
     let sum = 0;
-    let i;
-    if(current[0] != end[0]){
-        i = 1;
-    } else {
-        i = 0;
+
+    if(changeFirst){
+        sum += 1;        
+        for(let j = 1; j < 3; j++){
+            copyCurrent[d[j]] = copyCurrent[d[j]] == 0?1:0;
+        }
     }
     
-    for(; i < n; i++){
+    for(let i = 1; i < n; i++){
         let change = false;
-        for(let j = 0; j < 3; j++){
-            const dc = i + d[j];
-            if(dc >= 0 || dc < n){
-                if(current[dc] != end[dc]){
-                    change = true;
-                }
-            }
+        if(copyCurrent[i-1] != end[i-1]){
+            change = true;
         }
         if(change){            
             for(let j = 0; j < 3; j++){
                 const dc = i + d[j];
                 if(dc >= 0 && dc < n){
-                    current[dc] = current[dc] == 0?1:0;
-                }
-            }
-            if(i-1 >= 0){
-                if(current[i-1] != end[i-1]){
-                    sum = -1;
-                    break;
+                    copyCurrent[dc] = copyCurrent[dc] == 0?1:0;
                 }
             }
             sum++;
         }
     }
-    return sum;
+    return copyCurrent.join("") == end.join("")?sum:-1;
 }
 
+let output = -1;
+let answer1 = solution(true, current.slice(0));
+if(answer1 != -1){
+    output = answer1;
+}
+let answer2 = solution(false, current.slice(0));
+if(answer2 != -1){
+    output = output==-1?answer2:Math.min(answer2, output);
+}
 
-
-console.log(solution());
+console.log(output);
